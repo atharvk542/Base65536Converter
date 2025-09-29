@@ -2,10 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import sys
 import os
 
-# Add the scripts directory to the path
 sys.path.append(os.path.join(os.path.dirname(__file__), "scripts"))
 
-# Import the encode and decode functions
 from scripts.encode import encode_to_base65536
 from scripts.decode import decode_from_base65536
 
@@ -57,4 +55,8 @@ def convert():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+
+    debug_mode = os.environ.get("FLASK_ENV") != "production"
+
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
