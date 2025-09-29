@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Base65536 Converter</title>
+    <link rel="stylesheet" href="../static/styles.css" />
+  </head>
+  <body>
+    <div id="top_panel">
+      <h1>Welcome To the Base65536 Converter!</h1>
+      <form>
+        <label for="encode_input" style="align-self: center">Text to encode:</label>
+        <input type="text" id="encode_input" name="encode_input" required />
+        <button type="submit" id="submit_button">Encode</button>
+      </form>
+
+      <form>
+        <label for="decode_input" style="align-self: center">Text to decode:</label>
+        <input type="text" id="decode_input" name="decode_input" required />
+        <button type="submit" id="decode_submit">Decode</button>
+      </form>
+    </div>
+
+    <div id="result"></div>
+    <script>
+      document.querySelectorAll("form")[0].addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const encode_input = document.getElementById("encode_input").value;
+        const response = await fetch("/encode", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ encode_input }),
+        });
+
+        const data = await response.json();
+        document.getElementById("result").innerText = `Encoded text: ${ data.result }`;
+      });
+
+      document.querySelectorAll("form")[1].addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const decode_input = document.getElementById("decode_input").value;
+        const response = await fetch("/decode", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ decode_input }),
+        });
+
+        const data = await response.json();
+        document.getElementById("result").innerText = `Decoded text: ${data.result}`;
+      });
+
+    </script>
+  </body>
+</html>
